@@ -34,10 +34,12 @@ public class CartService implements ICartService{
     @Transactional
     @Override
     public void clearCart(Long id) {
-        Cart cart = getCart(id);
-        cart.getItems().clear();
-        cartRepository.save(cart);
-        cartRepository.delete(cart);
+//        Cart cart = getCart(id);
+//        cart.getItems().clear();
+//        cartRepository.save(cart);
+//        cartRepository.delete(cart);
+
+        cartRepository.deleteById(id);
     }
 
 

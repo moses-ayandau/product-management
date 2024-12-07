@@ -1,6 +1,8 @@
 package com.moses.code.controller;
 
+import com.moses.code.dto.CartDto;
 import com.moses.code.entity.Cart;
+import com.moses.code.mappers.CartMapper;
 import com.moses.code.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,10 +20,11 @@ public class CartController {
     private final ICartService cartService;
 
     @GetMapping("/{cartId}")
-    public ResponseEntity<Cart> getCart(@PathVariable Long cartId) {
+    public ResponseEntity<CartDto> getCart(@PathVariable Long cartId) {
 
             Cart cart = cartService.getCart(cartId);
-            return ResponseEntity.ok(cart);
+            CartDto cartDto = CartMapper.convertFromCartToCartDto(cart);
+            return ResponseEntity.ok(cartDto);
 
     }
 

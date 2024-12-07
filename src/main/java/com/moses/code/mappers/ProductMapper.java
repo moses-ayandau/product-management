@@ -10,7 +10,7 @@ public class ProductMapper {
         product.setCategory(productDto.getCategory());
         product.setPrice(productDto.getPrice());
         product.setDescription(productDto.getDescription());
-        product.setImages(productDto.getImages());
+//        product.setImages(productDto.getImages());
         product.setQuantity(productDto.getQuantity());
         return product;
     }
@@ -22,7 +22,7 @@ public class ProductMapper {
         productDto.setDescription(product.getDescription());
         productDto.setPrice(product.getPrice());
         productDto.setQuantity(product.getQuantity());
-        productDto.setImages(product.getImages());
+//        productDto.setImages(product.getImages());
         return productDto;
     }
 
