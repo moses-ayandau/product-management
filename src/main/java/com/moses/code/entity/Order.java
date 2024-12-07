@@ -1,5 +1,6 @@
 package com.moses.code.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,7 +19,7 @@ import java.util.Set;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long orderId;
+    private Long id;
     private LocalDate orderDate;
     private BigDecimal totalAmount;
     @Enumerated(EnumType.STRING)
@@ -27,6 +28,7 @@ public class Order {
     private Set<OrderItem> orderItems = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",  nullable = false)
+    @JsonManagedReference
     private User user;
 }

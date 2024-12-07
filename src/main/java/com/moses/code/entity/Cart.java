@@ -1,6 +1,8 @@
 package com.moses.code.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,11 +22,13 @@ public class Cart {
     private Long id;
     private BigDecimal totalAmount = BigDecimal.ZERO;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CartItem> items = new HashSet<>();
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @Version

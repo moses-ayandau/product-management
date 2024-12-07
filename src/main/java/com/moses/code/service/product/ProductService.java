@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class ProductService implements IProductService {
@@ -67,4 +69,36 @@ public class ProductService implements IProductService {
     public void deleteProduct(Long productId) throws ProductNotFoundException {
         productRepository.deleteById(productId);
     }
+
+
+
+    @Override
+    public List<Product> getProductsByCategory(String category) {
+        return productRepository.findProductsByCategory(category);
+    }
+
+    @Override
+    public List<Product> searchProductsByName(String name) {
+        return productRepository.searchProductsByName(name);
+    }
+
+    @Override
+    public List<Product> getTopExpensiveProducts(int limit) {
+        return productRepository.findTopExpensiveProducts(PageRequest.of(0, limit));
+    }
+    @Override
+    public long countProductsByCategory(String category) {
+        return productRepository.countProductsByCategory(category);
+    }
+
+    @Override
+    public List<Product> getAvailableProducts() {
+        return productRepository.findAvailableProducts();
+    }
+
+    @Override
+    public List<Product> getOutOfStockProducts() {
+        return productRepository.findOutOfStockProducts();
+    }
+
 }

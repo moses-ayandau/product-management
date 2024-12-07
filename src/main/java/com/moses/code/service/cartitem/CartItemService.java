@@ -3,9 +3,12 @@ package com.moses.code.service.cartitem;
 import com.moses.code.entity.Cart;
 import com.moses.code.entity.CartItem;
 import com.moses.code.entity.Product;
+import com.moses.code.entity.User;
+import com.moses.code.exception.NotFoundException;
 import com.moses.code.exception.ProductNotFoundException;
 import com.moses.code.repository.CartItemRepository;
 import com.moses.code.repository.CartRepository;
+import com.moses.code.repository.UserRepository;
 import com.moses.code.service.cart.ICartService;
 import com.moses.code.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +25,11 @@ public class CartItemService  implements ICartItemService {
     private final CartRepository cartRepository;
     private final IProductService productService;
     private final ICartService cartService;
+    private final UserRepository userRepository;
 
     @Transactional
     @Override
-    public void addItemToCart(Long cartId, Long productId, int quantity) {
+    public void addItemToCart(Long cartId, Long productId, int quantity, Long userId) {
         boolean success = false;
         int retries = 3;
 
@@ -33,6 +37,7 @@ public class CartItemService  implements ICartItemService {
             try {
                 Cart cart = cartService.getCart(cartId);
                 Product product = productService.getProductById(productId);
+                User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("User not found"));
                 CartItem cartItem = cart.getItems()
                         .stream()
                         .filter(item -> item.getProduct().getId().equals(productId))

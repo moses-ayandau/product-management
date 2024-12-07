@@ -1,7 +1,7 @@
 package com.moses.code.dto;
 
 import com.moses.code.entity.Category;
-import com.moses.code.entity.Image;
+import com.moses.code.mongodb.Image;
 import lombok.Data;
 
 

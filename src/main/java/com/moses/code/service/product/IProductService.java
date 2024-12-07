@@ -17,4 +17,16 @@ public interface IProductService {
     Product getProductByCategoryName(Long categoryName);
     Product updateProduct(Product product, Long productId) throws ProductNotFoundException;
     void deleteProduct(Long productId) throws ProductNotFoundException;
+
+    List<Product> getProductsByCategory(String category);
+
+    List<Product> searchProductsByName(String name);
+
+    List<Product> getTopExpensiveProducts(int limit);
+
+    long countProductsByCategory(String category);
+
+    List<Product> getAvailableProducts();
+
+    List<Product> getOutOfStockProducts();
 }

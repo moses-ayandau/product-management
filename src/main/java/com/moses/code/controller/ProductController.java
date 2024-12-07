@@ -30,6 +30,7 @@ public class ProductController {
         Product product = productService.addProduct(ProductMapper.convertFromProductDtoToProduct(productRequest));
         return new ResponseEntity<>(ProductMapper.convertFromProductToProductDto(product), HttpStatus.CREATED);
     }
+
     @Operation(summary = "Get paginated and sorted products", description = "Retrieves products with optional pagination and sorting.")
     @GetMapping
     public Page<Product> getAllProducts(
@@ -53,7 +54,7 @@ public class ProductController {
     @Operation(summary = "Update a product", description = "Updates an existing product by its ID.")
     public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productRequest, @PathVariable Long productId) throws ProductNotFoundException {
         Product product = productService.updateProduct(ProductMapper.convertFromProductDtoToProduct(productRequest), productId);
-        return new ResponseEntity<>( ProductMapper.convertFromProductToProductDto(product), HttpStatus.OK);
+        return new ResponseEntity<>(ProductMapper.convertFromProductToProductDto(product), HttpStatus.OK);
     }
 
     @DeleteMapping("/{productId}")
@@ -61,5 +62,49 @@ public class ProductController {
     public ResponseEntity<String> deleteProduct(@PathVariable Long productId) throws ProductNotFoundException {
         productService.deleteProduct(productId);
         return new ResponseEntity<>("Product deleted successfully", HttpStatus.NO_CONTENT);
+    }
+
+    // New methods based on the updated service
+
+    @GetMapping("/category/{category}")
+    @Operation(summary = "Get products by category", description = "Retrieves all products in a specific category.")
+    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String category) {
+        List<Product> products = productService.getProductsByCategory(category);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/search")
+    @Operation(summary = "Search products by name", description = "Searches for products by their name (case-insensitive).")
+    public ResponseEntity<List<Product>> searchProductsByName(@RequestParam String name) {
+        List<Product> products = productService.searchProductsByName(name);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/expensive")
+    @Operation(summary = "Get top expensive products", description = "Retrieves the top N most expensive products.")
+    public ResponseEntity<List<Product>> getTopExpensiveProducts(@RequestParam(defaultValue = "5") int limit) {
+        List<Product> products = productService.getTopExpensiveProducts(limit);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/count/{category}")
+    @Operation(summary = "Count products by category", description = "Counts the number of products in a specific category.")
+    public ResponseEntity<Long> countProductsByCategory(@PathVariable String category) {
+        long count = productService.countProductsByCategory(category);
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/available")
+    @Operation(summary = "Get available products", description = "Retrieves all products that are in stock.")
+    public ResponseEntity<List<Product>> getAvailableProducts() {
+        List<Product> products = productService.getAvailableProducts();
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/out-of-stock")
+    @Operation(summary = "Get out-of-stock products", description = "Retrieves all products that are out of stock.")
+    public ResponseEntity<List<Product>> getOutOfStockProducts() {
+        List<Product> products = productService.getOutOfStockProducts();
+        return ResponseEntity.ok(products);
     }
 }

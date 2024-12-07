@@ -20,18 +20,18 @@ public class OrderItem {
     private BigDecimal price;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     public OrderItem(Order order, Product product, int quantity, BigDecimal price) {
         this.order = order;
         this.product = product;
         this.quantity = quantity;
-        this.price = price;
+        this.price = product.getPrice().multiply(BigDecimal.valueOf(quantity));
 
     }
 }

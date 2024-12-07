@@ -20,11 +20,12 @@ public class CartItemController {
     @PostMapping("/add")
     public ResponseEntity<String> addItemToCart(@RequestParam(required = false) Long cartId,
                                                      @RequestParam Long productId,
-                                                     @RequestParam Integer quantity) {
+                                                     @RequestParam Integer quantity,
+                                                    @RequestParam Long userId) {
             if (cartId == null) {
                 cartId= cartService.initializeNewCart();
             }
-            cartItemService.addItemToCart(cartId, productId, quantity);
+            cartItemService.addItemToCart(cartId, productId, quantity, userId);
             return new ResponseEntity<>("Item added to cart" , HttpStatus.OK);
     }
 
