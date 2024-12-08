@@ -1,27 +1,21 @@
 package com.moses.code.dto;
 
-import com.moses.code.entity.Category;
-import com.moses.code.mongodb.Image;
-import lombok.Data;
-
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@Builder
 public class ProductDto {
-
+    private Long id;
     private String name;
-
     private BigDecimal price;
     private int quantity;
     private String description;
-
-
-
-    private Category category;
-
+    private String categoryName;
     private List<String> imageUrls;
-
-
 }

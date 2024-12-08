@@ -38,9 +38,9 @@ public class Product {
     private Category category;
 
     @Schema(description = "Image URLs stored as JSON")
-    @Lob
     @Column(name = "image_urls", columnDefinition = "TEXT")
     @Convert(converter = ListToJsonConverter.class)
+    @Basic(fetch = FetchType.LAZY)
     private List<String> imageUrls;
 
     public Product(String name, String brand, BigDecimal price, int quantity, String description, Category category) {

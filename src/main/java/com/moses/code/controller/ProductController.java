@@ -27,8 +27,8 @@ public class ProductController {
 
     @PostMapping("/add")
     @Operation(summary = "Add a new product", description = "Creates a new product and associates it with a category.")
-    public ResponseEntity<ProductDto> addProduct(@RequestBody ProductDto productRequest) throws CategoryNotFoundException {
-        Product product = productService.addProduct(ProductMapper.convertFromProductDtoToProduct(productRequest));
+    public ResponseEntity<ProductDto> addProduct(@RequestBody Product productRequest) throws CategoryNotFoundException {
+        Product product = productService.addProduct(productRequest);
         return new ResponseEntity<>(ProductMapper.convertFromProductToProductDto(product), HttpStatus.CREATED);
     }
 
@@ -53,8 +53,8 @@ public class ProductController {
 
     @PatchMapping("/{productId}")
     @Operation(summary = "Update a product", description = "Updates an existing product by its ID.")
-    public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productRequest, @PathVariable Long productId) throws ProductNotFoundException {
-        Product product = productService.updateProduct(ProductMapper.convertFromProductDtoToProduct(productRequest), productId);
+    public ResponseEntity<ProductDto> updateProduct(@RequestBody Product productRequest, @PathVariable Long productId) throws ProductNotFoundException {
+        Product product = productService.updateProduct(productRequest, productId);
         return new ResponseEntity<>(ProductMapper.convertFromProductToProductDto(product), HttpStatus.OK);
     }
 
