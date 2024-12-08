@@ -5,6 +5,7 @@ import com.moses.code.exception.CategoryNotFoundException;
 import com.moses.code.exception.ProductNotFoundException;
 import org.springframework.data.domain.Page;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,9 +25,18 @@ public interface IProductService {
 
     List<Product> getTopExpensiveProducts(int limit);
 
-    long countProductsByCategory(String category);
+
+    long countProductsByCategoryName(String categoryName);
 
     List<Product> getAvailableProducts();
 
     List<Product> getOutOfStockProducts();
+
+    void updateProductDownloadUrls(List<String> downloadUrls, Long productId);
+
+    void loadProductsIntoTree();
+
+    Product findProductByPrice(BigDecimal price);
+
+    List<Product> getProductsSortedByPrice();
 }

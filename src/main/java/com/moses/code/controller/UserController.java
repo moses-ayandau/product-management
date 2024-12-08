@@ -5,7 +5,6 @@ import com.moses.code.exception.EmailAlreadyExistException;
 import com.moses.code.exception.UserNotFoundException;
 import com.moses.code.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +20,15 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody User userRequest) throws EmailAlreadyExistException {
-        User user = userService.createUser(userRequest);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+       try{
+           User user = userService.createUser(userRequest);
+           return new ResponseEntity<>(user, HttpStatus.CREATED);
+       }
+       catch (Exception e){
+           e.printStackTrace();
+
+       }
+       return null;
     }
 
     @GetMapping

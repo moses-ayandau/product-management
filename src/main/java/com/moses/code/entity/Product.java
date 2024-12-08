@@ -1,6 +1,6 @@
 package com.moses.code.entity;
 
-
+import com.moses.code.dto.ListToJsonConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,14 +33,14 @@ public class Product {
     @Schema(description = "Description of the product")
     private String description;
 
-
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = true)
     private Category category;
 
-    @ElementCollection
-    @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
-    @Column(name = "image_url")
+    @Schema(description = "Image URLs stored as JSON")
+    @Lob
+    @Column(name = "image_urls", columnDefinition = "TEXT")
+    @Convert(converter = ListToJsonConverter.class)
     private List<String> imageUrls;
 
     public Product(String name, String brand, BigDecimal price, int quantity, String description, Category category) {
@@ -50,6 +50,4 @@ public class Product {
         this.description = description;
         this.category = category;
     }
-
-
 }

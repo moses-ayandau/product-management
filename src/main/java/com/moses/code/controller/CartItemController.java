@@ -25,7 +25,7 @@ public class CartItemController {
             if (cartId == null) {
                 cartId= cartService.initializeNewCart();
             }
-            cartItemService.addItemToCart(cartId, productId, quantity, userId);
+            cartItemService.addItemToCart (cartId, productId, quantity, userId);
             return new ResponseEntity<>("Item added to cart" , HttpStatus.OK);
     }
 

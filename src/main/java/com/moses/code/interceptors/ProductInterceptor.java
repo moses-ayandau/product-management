@@ -9,45 +9,49 @@ import org.springframework.web.servlet.ModelAndView;
 @Component
 public class ProductInterceptor implements HandlerInterceptor {
 
-    // Request is intercepted by this method before reaching the Controller
+    private final ThreadLocal<Long> startTimeThreadLocal = new ThreadLocal<>();
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-        //* Business logic just when the request is received and intercepted by this interceptor before reaching the controller
         try {
-            System.out.println("1 - preHandle() : Before sending request to the Controller");
+            long startTime = System.currentTimeMillis();
+            startTimeThreadLocal.set(startTime);
+            System.out.println("Incoming request!");
             System.out.println("Method Type: " + request.getMethod());
             System.out.println("Request URL: " + request.getRequestURI());
-        }
-        //* If the Exception is caught, this method will return false
-        catch (Exception e) {
+            System.out.println("Start Time: " + startTime);
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
         return true;
     }
 
-    // Response is intercepted by this method before reaching the client
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        //* Business logic just before the response reaches the client and the request is served
         try {
-            System.out.println("2 - postHandle() : After the Controller serves the request (before returning back response to the client)");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // This method is called after request & response HTTP communication is done.
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        //* Business logic after request and response is Completed
         try {
-            System.out.println("3 - afterCompletion() : After the request and Response is completed");
-        }
-        catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            Long startTime = startTimeThreadLocal.get();
+            if (startTime != null) {
+                long duration = endTime - startTime;
+                System.out.println("Request Method: " + request.getMethod());
+                System.out.println("Request URL: " + request.getRequestURI());
+                System.out.println("Time Taken: " + duration + " ms");
+            } else {
+                System.out.println("Start time was not recorded. Unable to calculate time taken.");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            startTimeThreadLocal.remove(); // Clean up ThreadLocal to prevent memory leaks
         }
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,7 @@ public class ProductController {
     @Autowired
     private IProductService productService;
 
-    @PostMapping
+    @PostMapping("/add")
     @Operation(summary = "Add a new product", description = "Creates a new product and associates it with a category.")
     public ResponseEntity<ProductDto> addProduct(@RequestBody ProductDto productRequest) throws CategoryNotFoundException {
         Product product = productService.addProduct(ProductMapper.convertFromProductDtoToProduct(productRequest));
@@ -87,11 +88,9 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/count/{category}")
-    @Operation(summary = "Count products by category", description = "Counts the number of products in a specific category.")
-    public ResponseEntity<Long> countProductsByCategory(@PathVariable String category) {
-        long count = productService.countProductsByCategory(category);
-        return ResponseEntity.ok(count);
+    @GetMapping("/count/{categoryName}")
+    public Long countProductsByCategory(@PathVariable String categoryName) {
+        return productService.countProductsByCategoryName(categoryName);
     }
 
     @GetMapping("/available")
@@ -106,5 +105,22 @@ public class ProductController {
     public ResponseEntity<List<Product>> getOutOfStockProducts() {
         List<Product> products = productService.getOutOfStockProducts();
         return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/load-binary-search")
+    public String loadProducts() {
+        productService.loadProductsIntoTree();
+        return "Products loaded into binary tree!";
+    }
+
+    @GetMapping("/binary-search")
+    public Product findProductByPrice(@RequestParam BigDecimal price) {
+        return productService.findProductByPrice(price);
+    }
+
+
+    @GetMapping("/sort-binary-search")
+    public List<Product> getSortedProducts() {
+        return productService.getProductsSortedByPrice();
     }
 }

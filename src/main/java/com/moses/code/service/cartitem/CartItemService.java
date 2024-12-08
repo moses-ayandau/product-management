@@ -54,7 +54,7 @@ public class CartItemService  implements ICartItemService {
                 } else {
                     cartItem.setQuantity(cartItem.getQuantity() + quantity);
                 }
-
+                cart.setUser(user);
                 cartRepository.save(cart);
                 success = true;
             } catch (OptimisticLockingFailureException ex) {

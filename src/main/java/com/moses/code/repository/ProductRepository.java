@@ -25,13 +25,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p ORDER BY p.price DESC")
     List<Product> findTopExpensiveProducts(Pageable pageable);
 
-    @Query("SELECT COUNT(p) FROM Product p WHERE p.category = :category")
-    long countProductsByCategory(@Param("category") String category);
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.category.name = :categoryName")
+    Long countProductsByCategoryName(@Param("categoryName") String categoryName);
 
-
-    @Query("SELECT p FROM Product p WHERE p.stock > 0")
+    @Query("SELECT p FROM Product p WHERE p.quantity > 0")
     List<Product> findAvailableProducts();
 
-    @Query("SELECT p FROM Product p WHERE p.stock = 0")
+    @Query("SELECT p FROM Product p WHERE p.quantity = 0")
     List<Product> findOutOfStockProducts();
 }
