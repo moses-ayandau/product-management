@@ -35,7 +35,7 @@
 
 - bash
 Copy code
-git clone https://github.com/your-username/product-management-api.git
+git clone https://github.com/moses-ayandau/product-management.git
 cd product-management-api
 Configure the application properties:
 
