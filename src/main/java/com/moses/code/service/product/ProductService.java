@@ -7,6 +7,7 @@ import com.moses.code.exception.CategoryNotFoundException;
 import com.moses.code.exception.ProductNotFoundException;
 import com.moses.code.repository.CategoryRepository;
 import com.moses.code.repository.ProductRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -76,7 +77,8 @@ public class ProductService implements IProductService {
 
     @Override
     public void deleteProduct(Long productId) throws ProductNotFoundException {
-        productRepository.deleteById(productId);
+        Product product = getProductById(productId);
+        productRepository.delete(product);
     }
 
 

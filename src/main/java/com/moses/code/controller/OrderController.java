@@ -6,16 +6,17 @@ import com.moses.code.exception.NotFoundException;
 import com.moses.code.mappers.OrderMapper;
 import com.moses.code.service.order.IOrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
-    private final IOrderService orderService;
+    @Autowired
+    private IOrderService orderService;
 
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestParam Long userId) {

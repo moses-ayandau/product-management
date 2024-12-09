@@ -34,14 +34,16 @@ public class ProductController {
 
     @Operation(summary = "Get paginated and sorted products", description = "Retrieves products with optional pagination and sorting.")
     @GetMapping
-    public Page<Product> getAllProducts(
+    public Page<ProductDto> getAllProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDirection
     ) {
-        return productService.getPaginatedAndSortedProducts(page, size, sortBy, sortDirection);
+        Page<Product> productPage = productService.getPaginatedAndSortedProducts(page, size, sortBy, sortDirection);
+        return productPage.map(ProductMapper::convertFromProductToProductDto);
     }
+
 
     @GetMapping("/{productId}")
     @Operation(summary = "Get product by ID", description = "Retrieves a product by its ID.")
@@ -65,7 +67,6 @@ public class ProductController {
         return new ResponseEntity<>("Product deleted successfully", HttpStatus.NO_CONTENT);
     }
 
-    // New methods based on the updated service
 
     @GetMapping("/category/{category}")
     @Operation(summary = "Get products by category", description = "Retrieves all products in a specific category.")

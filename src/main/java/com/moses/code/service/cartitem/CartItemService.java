@@ -12,6 +12,7 @@ import com.moses.code.repository.UserRepository;
 import com.moses.code.service.cart.ICartService;
 import com.moses.code.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +20,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 
 @Service
-@RequiredArgsConstructor
 public class CartItemService  implements ICartItemService {
-    private final CartItemRepository cartItemRepository;
-    private final CartRepository cartRepository;
-    private final IProductService productService;
-    private final ICartService cartService;
-    private final UserRepository userRepository;
+    @Autowired
+    private CartItemRepository cartItemRepository;
+    @Autowired
+    private CartRepository cartRepository;
+    @Autowired
+    private IProductService productService;
+    @Autowired
+    private ICartService cartService;
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional
     @Override
@@ -84,7 +89,6 @@ public class CartItemService  implements ICartItemService {
                 .ifPresent(item -> {
                     item.setQuantity(quantity);
                     item.setUnitPrice(item.getProduct().getPrice());
-//                    item.setTotalPrice();
                 });
         BigDecimal totalAmount = cart.getItems()
                 .stream().map(CartItem::getTotalPrice)

@@ -15,5 +15,4 @@ public interface IUserService {
 
     void deleteUser(Long userId) throws UserNotFoundException;
 
-    User authenticate(String email, String password) throws UnAuthenticatedException;
 }

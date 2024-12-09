@@ -37,18 +37,9 @@ public class UserService implements IUserService {
 
     @Override
     public void deleteUser(Long userId) throws UserNotFoundException {
-        userRepository.deleteById(userId);
+        User user = getUserById(userId);
+        userRepository.delete(user);
     }
 
-    @Override
-    public User authenticate(String email, String password) throws UnAuthenticatedException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UnAuthenticatedException("Invalid email or password"));
 
-        if (!PasswordUtils.verifyPassword(password, user.getPassword())) {
-            throw new UnAuthenticatedException("Invalid email or password");
-        }
-
-        return user;
-    }
 }
