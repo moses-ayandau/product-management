@@ -8,9 +8,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 public class Image {
     @Id
-    private String id;            // Unique ID for the image
-    private String productId;     // Optional: link to a product
-    private String imageUrl;      // URL for the image
-    private String contentType;   // e.g., "image/png"
-    private long size;            // Size in bytes
+    private String id;
+    private String productId;
+    private String imageUrl;
+    private String contentType;
+    private long size;
 }

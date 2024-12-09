@@ -1,8 +1,9 @@
 package com.moses.code.service.user;
 
-import com.moses.code.entity.Product;
+import com.moses.code.utils.PasswordUtils;
 import com.moses.code.entity.User;
 import com.moses.code.exception.EmailAlreadyExistException;
+import com.moses.code.exception.UnAuthenticatedException;
 import com.moses.code.exception.UserNotFoundException;
 import com.moses.code.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,19 +12,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService implements IUserService{
+public class UserService implements IUserService {
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public User createUser(User user) throws EmailAlreadyExistException {
-
+        String hashedPassword = PasswordUtils.hashPassword(user.getPassword());
+        user.setPassword(hashedPassword);
         return userRepository.save(user);
     }
 
     @Override
     public User getUserById(Long userId) throws UserNotFoundException {
-        return userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("User not found"));
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     @Override
@@ -31,19 +33,13 @@ public class UserService implements IUserService{
         return userRepository.findAll();
     }
 
-    @Override
-    public void disableUser(Long userId) throws UserNotFoundException {
 
-    }
 
     @Override
-    public void deleteUserPermanently(Long userId) throws UserNotFoundException {
-    userRepository.deleteById(userId);
+    public void deleteUser(Long userId) throws UserNotFoundException {
+        User user = getUserById(userId);
+        userRepository.delete(user);
     }
 
-    @Override
-    public List<Product> getProductsByUserId(Long userId) throws UserNotFoundException {
 
-        return List.of();
-    }
 }

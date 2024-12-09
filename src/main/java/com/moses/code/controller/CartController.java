@@ -4,7 +4,7 @@ import com.moses.code.dto.CartDto;
 import com.moses.code.entity.Cart;
 import com.moses.code.mappers.CartMapper;
 import com.moses.code.service.cart.ICartService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +13,11 @@ import java.math.BigDecimal;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
-    private final ICartService cartService;
+    @Autowired
+    private ICartService cartService;
 
     @GetMapping("/{cartId}")
     public ResponseEntity<CartDto> getCart(@PathVariable Long cartId) {

@@ -7,6 +7,7 @@ import com.moses.code.repository.ProductRepository;
 import com.moses.code.repository.UserRepository;
 import com.moses.code.service.cart.CartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,12 +17,15 @@ import java.util.HashSet;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class OrderService implements IOrderService {
-    private final OrderRepository orderRepository;
-    private final ProductRepository productRepository;
-    private final CartService cartService;
-    private final UserRepository userRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private CartService cartService;
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Transactional

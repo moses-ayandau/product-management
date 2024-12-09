@@ -27,6 +27,7 @@ public class Category {
     @Schema(description = "Primary key of the category")
     private Long Id;
 
+    @Column(unique = true, nullable = false)
     @Schema(description = "Name of the category")
     private String name;
 

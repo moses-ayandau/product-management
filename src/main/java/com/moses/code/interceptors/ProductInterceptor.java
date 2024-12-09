@@ -2,6 +2,8 @@ package com.moses.code.interceptors;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -9,45 +11,69 @@ import org.springframework.web.servlet.ModelAndView;
 @Component
 public class ProductInterceptor implements HandlerInterceptor {
 
-    // Request is intercepted by this method before reaching the Controller
+    private static final Logger logger = LoggerFactory.getLogger(ProductInterceptor.class);
+    private final ThreadLocal<Long> startTimeThreadLocal = new ThreadLocal<>();
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-        //* Business logic just when the request is received and intercepted by this interceptor before reaching the controller
         try {
-            System.out.println("1 - preHandle() : Before sending request to the Controller");
-            System.out.println("Method Type: " + request.getMethod());
-            System.out.println("Request URL: " + request.getRequestURI());
-        }
-        //* If the Exception is caught, this method will return false
-        catch (Exception e) {
-            e.printStackTrace();
+            long startTime = System.currentTimeMillis();
+            startTimeThreadLocal.set(startTime);
+
+            logger.info("Incoming Request: [Method: {}, URI: {}, Start Time: {}]",
+                    request.getMethod(),
+                    request.getRequestURI(),
+                    startTime);
+        } catch (Exception e) {
+            logger.error("Error during preHandle", e);
             return false;
         }
         return true;
     }
 
-    // Response is intercepted by this method before reaching the client
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        //* Business logic just before the response reaches the client and the request is served
         try {
-            System.out.println("2 - postHandle() : After the Controller serves the request (before returning back response to the client)");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+            long currentTime = System.currentTimeMillis();
+            Long startTime = startTimeThreadLocal.get();
+
+            if (startTime != null) {
+                long processingTime = currentTime - startTime;
+                logger.info("Request Processing Time: [Method: {}, URI: {}, Processing Time: {} ms]",
+                        request.getMethod(),
+                        request.getRequestURI(),
+                        processingTime);
+            } else {
+                logger.warn("Start time was not recorded. Unable to calculate processing time.");
+            }
+        } catch (Exception e) {
+            logger.error("Error during postHandle", e);
         }
     }
 
-    // This method is called after request & response HTTP communication is done.
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        //* Business logic after request and response is Completed
         try {
-            System.out.println("3 - afterCompletion() : After the request and Response is completed");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+            long endTime = System.currentTimeMillis();
+            Long startTime = startTimeThreadLocal.get();
+
+            if (startTime != null) {
+                long duration = endTime - startTime;
+                logger.info("Request Completed: [Method: {}, URI: {}, Total Time Taken: {} ms]",
+                        request.getMethod(),
+                        request.getRequestURI(),
+                        duration);
+            } else {
+                logger.warn("Start time was not recorded. Unable to calculate total request duration.");
+            }
+
+            if (ex != null) {
+                logger.error("Exception occurred after request completion", ex);
+            }
+        } catch (Exception e) {
+            logger.error("Error during afterCompletion", e);
+        } finally {
+            startTimeThreadLocal.remove();
         }
     }
 }

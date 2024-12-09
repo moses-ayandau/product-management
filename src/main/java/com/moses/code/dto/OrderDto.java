@@ -1,26 +1,21 @@
 package com.moses.code.dto;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.moses.code.entity.OrderItem;
-import com.moses.code.entity.OrderStatus;
-import com.moses.code.entity.User;
-import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
+@Builder
 public class OrderDto {
-
     private Long id;
     private LocalDate orderDate;
     private BigDecimal totalAmount;
-    private OrderStatus orderStatus;
-    private Set<OrderItem> orderItems;
-
-
-    private User user;
+    private String orderStatus;
+    private String userName;
+    private List<OrderItemDto> orderItems;
 }
