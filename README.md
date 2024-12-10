@@ -57,7 +57,7 @@ mvn clean install
 mvn spring-boot:run
 Access the API documentation:
 
-Open http://localhost:8080/swagger-ui.html in your browser to view the API endpoints.
+Open http://localhost:5000/swagger-ui.html in your browser to view the API endpoints.
 
 
 ## Endpoints
