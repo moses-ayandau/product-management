@@ -15,7 +15,6 @@ public class OrderMapper {
                 .id(order.getId())
                 .orderDate(order.getOrderDate())
                 .totalAmount(order.getTotalAmount())
-                .orderStatus(order.getOrderStatus().name())
                 .userName(order.getUser().getFirstName())
                 .orderItems(order.getOrderItems().stream()
                         .map(OrderMapper::convertFromOrderItemToOrderItemDto)

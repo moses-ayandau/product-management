@@ -1,9 +1,7 @@
 package com.moses.code.interceptors;
 
-import com.moses.code.service.user.IUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -15,8 +13,6 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
 
-    @Autowired
-    private IUserService userService;
 
     @Value("${auth.token}")
     private String hardcodedJwtToken;

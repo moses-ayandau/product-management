@@ -18,6 +18,11 @@ public class UserService implements IUserService {
 
     @Override
     public User createUser(User user) throws EmailAlreadyExistException {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new EmailAlreadyExistException("Email already exists: " + user.getEmail());
+        }
+
+
         String hashedPassword = PasswordUtils.hashPassword(user.getPassword());
         user.setPassword(hashedPassword);
         return userRepository.save(user);

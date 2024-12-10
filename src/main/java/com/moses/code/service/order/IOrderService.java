@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface IOrderService {
-    @Transactional
     Order placeOrder(Long userId);
 
     Order getOrder(Long orderId);

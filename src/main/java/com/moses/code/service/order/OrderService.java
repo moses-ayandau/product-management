@@ -32,16 +32,11 @@ public class OrderService implements IOrderService {
     @Override
     public Order placeOrder(Long userId) {
         Cart cart   = cartService.getCartByUserId(userId);
-        System.out.println("User id " +userId);
-        User user = userRepository.findById(userId).orElseThrow(()->new NotFoundException("User not fount"));
-        System.out.println(user.getCart());
-        System.out.println(user.getFirstName());
         Order order = createOrder(cart);
         List<OrderItem> orderItemList = createOrderItems(order, cart);
         order.setOrderItems(new HashSet<>(orderItemList));
         order.setTotalAmount(calculateTotalAmount(orderItemList));
         Order savedOrder = orderRepository.save(order);
-        System.out.println(savedOrder.getId());
         cartService.clearCart(cart.getId());
         return savedOrder;
     }
@@ -49,7 +44,6 @@ public class OrderService implements IOrderService {
     private Order createOrder(Cart cart) {
         Order order = new Order();
         order.setUser(cart.getUser());
-        order.setOrderStatus(OrderStatus.PENDING);
         order.setOrderDate(LocalDate.now());
         return  order;
     }

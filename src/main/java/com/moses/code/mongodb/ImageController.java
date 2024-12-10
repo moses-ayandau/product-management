@@ -17,9 +17,6 @@ public class ImageController {
     @Autowired
     private ProductService productService;
 
-    /**
-     * Upload multiple images and link them to a product.
-     */
     @PostMapping("/upload")
     public ResponseEntity<List<Image>> uploadImages(
             @RequestParam("files") List<MultipartFile> files,

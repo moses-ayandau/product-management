@@ -1,10 +1,10 @@
 package com.moses.code.service.product;
 
 import com.moses.code.binarytree.BinaryTree;
+import com.moses.code.dto.ProductDto;
 import com.moses.code.entity.Category;
 import com.moses.code.entity.Product;
-import com.moses.code.exception.CategoryNotFoundException;
-import com.moses.code.exception.ProductNotFoundException;
+import com.moses.code.exception.NotFoundException;
 import com.moses.code.repository.CategoryRepository;
 import com.moses.code.repository.ProductRepository;
 
@@ -34,17 +34,21 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product addProduct(Product productRequest) throws CategoryNotFoundException {
+    public Product addProduct(ProductDto productRequest) throws NotFoundException {
         Product product = new Product();
         product.setName(productRequest.getName());
         product.setDescription(productRequest.getDescription());
         product.setPrice(productRequest.getPrice());
         product.setQuantity(productRequest.getQuantity());
-        Category category = categoryRepository.findById(productRequest.getCategory().getId()).orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+
+        Category category = (Category) categoryRepository.findCategoryByName(productRequest.getCategoryName())
+                .orElseThrow(() -> new NotFoundException("Category not found with name: " + productRequest.getCategoryName()));
+
         product.setCategory(category);
 
         return productRepository.save(product);
     }
+
 
     public Page<Product> getPaginatedAndSortedProducts(int page, int size, String sortBy, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase("asc")
@@ -55,8 +59,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product getProductById(Long productId) throws ProductNotFoundException {
-        return productRepository.findById(productId).orElseThrow(()->new ProductNotFoundException("Product Not found with the specified Id"));
+    public Product getProductById(Long productId) throws NotFoundException {
+        return productRepository.findById(productId).orElseThrow(()->new NotFoundException("Product Not found with the specified Id"));
     }
 
     @Override
@@ -65,18 +69,36 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product updateProduct(Product product, Long productId) throws ProductNotFoundException {
-       Product existingProduct = productRepository.findById(productId).orElseThrow(()-> new ProductNotFoundException("Product not found with this Id"));
-        existingProduct.setQuantity(product.getQuantity());
-        existingProduct.setPrice(product.getPrice());
-        existingProduct.setCategory(product.getCategory());
-        existingProduct.setName(product.getName());
-        existingProduct.setDescription(product.getDescription());
+    public Product updateProduct(ProductDto product, Long productId) throws NotFoundException {
+        Product existingProduct = productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundException("Product not found with this Id"));
+
+        if (product.getQuantity() > 0) {
+            existingProduct.setQuantity(product.getQuantity());
+        }
+
+        if (product.getPrice() != null && product.getPrice().compareTo(BigDecimal.ZERO) > 0) {
+            existingProduct.setPrice(product.getPrice());
+        }
+
+        if (product.getName() != null && !product.getName().isEmpty()) {
+            existingProduct.setName(product.getName());
+        }
+
+        if (product.getDescription() != null && !product.getDescription().isEmpty()) {
+            existingProduct.setDescription(product.getDescription());
+        }
+
+        if (product.getImageUrls() != null && !product.getImageUrls().isEmpty()) {
+            existingProduct.setImageUrls(product.getImageUrls());
+        }
         return productRepository.save(existingProduct);
     }
 
+
+
     @Override
-    public void deleteProduct(Long productId) throws ProductNotFoundException {
+    public void deleteProduct(Long productId) throws NotFoundException {
         Product product = getProductById(productId);
         productRepository.delete(product);
     }
@@ -84,9 +106,13 @@ public class ProductService implements IProductService {
 
 
     @Override
-    public List<Product> getProductsByCategory(String category) {
+    public List<Product> getProductsByCategory(String categoryName) {
+        Category category = (Category) categoryRepository.findCategoryByName(categoryName)
+                .orElseThrow(() -> new NotFoundException("Category not found with name: " + categoryName));
+
         return productRepository.findProductsByCategory(category);
     }
+
 
     @Override
     public List<Product> searchProductsByName(String name) {
@@ -141,6 +167,15 @@ public class ProductService implements IProductService {
         List<Product> sortedProducts = new ArrayList<>();
         binaryTree.inOrderTraversal(sortedProducts);
         return sortedProducts;
+    }
+
+    @Override
+    public List<String> getProductImages(Long productId){
+        List<String> imageUrls =productRepository.findProductImages(productId);
+        if(imageUrls.isEmpty()){
+            throw new NotFoundException("This product does not have image or product does not exist");
+        }
+        return imageUrls ;
     }
 
 }
