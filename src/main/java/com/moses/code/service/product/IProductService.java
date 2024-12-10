@@ -1,23 +1,22 @@
 package com.moses.code.service.product;
 
+import com.moses.code.dto.ProductDto;
 import com.moses.code.entity.Product;
-import com.moses.code.exception.CategoryNotFoundException;
-import com.moses.code.exception.ProductNotFoundException;
+import com.moses.code.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 public interface IProductService {
-    Product addProduct(Product product) throws CategoryNotFoundException;
+    Product addProduct(ProductDto product) throws NotFoundException;
 
     Page<Product> getPaginatedAndSortedProducts(int page, int size, String sortBy, String sortDirection);
 
-    Product getProductById(Long  productId) throws ProductNotFoundException;
+    Product getProductById(Long  productId) throws NotFoundException;
     Product getProductByCategoryName(Long categoryName);
-    Product updateProduct(Product product, Long productId) throws ProductNotFoundException;
-    void deleteProduct(Long productId) throws ProductNotFoundException;
+    Product updateProduct(ProductDto product, Long productId) throws NotFoundException;
+    void deleteProduct(Long productId) throws NotFoundException;
 
     List<Product> getProductsByCategory(String category);
 
@@ -39,4 +38,6 @@ public interface IProductService {
     Product findProductByPrice(BigDecimal price);
 
     List<Product> getProductsSortedByPrice();
+
+    List<String> getProductImages(Long productId);
 }

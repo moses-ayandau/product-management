@@ -1,7 +1,7 @@
 package com.moses.code.controller;
 
 import com.moses.code.entity.Category;
-import com.moses.code.exception.CategoryNotFoundException;
+import com.moses.code.exception.NotFoundException;
 import com.moses.code.service.category.ICategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,13 +35,13 @@ public class CategoryController {
 
     @GetMapping("/{categoryId}")
     @Operation(summary = "Get category by ID", description = "Retrieves a category by its ID.")
-    public ResponseEntity<Category> getCategoryByID(@PathVariable Long categoryId) throws CategoryNotFoundException {
+    public ResponseEntity<Category> getCategoryByID(@PathVariable Long categoryId) throws NotFoundException {
         return new ResponseEntity<>(categoryService.getCategoryById(categoryId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{categoryId}")
     @Operation(summary = "Delete a category", description = "Deletes a category by its ID.")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId) throws CategoryNotFoundException {
+    public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId) throws NotFoundException {
         categoryService.deleteCategory(categoryId);
         return new ResponseEntity<>("Category deleted successfully", HttpStatus.NO_CONTENT);
     }

@@ -23,8 +23,6 @@ public class Order {
     private Long id;
     private LocalDate orderDate;
     private BigDecimal totalAmount;
-    @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
 
     @JsonIgnore
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)

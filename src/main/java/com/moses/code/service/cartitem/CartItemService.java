@@ -5,13 +5,11 @@ import com.moses.code.entity.CartItem;
 import com.moses.code.entity.Product;
 import com.moses.code.entity.User;
 import com.moses.code.exception.NotFoundException;
-import com.moses.code.exception.ProductNotFoundException;
 import com.moses.code.repository.CartItemRepository;
 import com.moses.code.repository.CartRepository;
 import com.moses.code.repository.UserRepository;
 import com.moses.code.service.cart.ICartService;
 import com.moses.code.service.product.IProductService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -40,9 +38,11 @@ public class CartItemService  implements ICartItemService {
 
         while (!success && retries > 0) {
             try {
-                Cart cart = cartService.getCart(cartId);
-                Product product = productService.getProductById(productId);
-                User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("User not found"));
+                Cart cart = cartService.getCart(cartId); // Get the cart by cartId
+                Product product = productService.getProductById(productId); // Get the product by productId
+                User user = userRepository.findById(userId)
+                        .orElseThrow(() -> new NotFoundException("User not found"));
+
                 CartItem cartItem = cart.getItems()
                         .stream()
                         .filter(item -> item.getProduct().getId().equals(productId))
@@ -59,7 +59,11 @@ public class CartItemService  implements ICartItemService {
                 } else {
                     cartItem.setQuantity(cartItem.getQuantity() + quantity);
                 }
-                cart.setUser(user);
+
+                if (cart.getUser() == null) {
+                    cart.setUser(user);
+                }
+
                 cartRepository.save(cart);
                 success = true;
             } catch (OptimisticLockingFailureException ex) {
@@ -68,6 +72,7 @@ public class CartItemService  implements ICartItemService {
             }
         }
     }
+
 
 
 
@@ -104,7 +109,7 @@ public class CartItemService  implements ICartItemService {
         return cart.getItems()
                 .stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
-                .findFirst().orElseThrow(() -> new ProductNotFoundException("Item not found"));
+                .findFirst().orElseThrow(() -> new NotFoundException("Item not found"));
     }
 
 }

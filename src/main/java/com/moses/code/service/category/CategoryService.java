@@ -1,7 +1,7 @@
 package com.moses.code.service.category;
 
 import com.moses.code.entity.Category;
-import com.moses.code.exception.CategoryNotFoundException;
+import com.moses.code.exception.NotFoundException;
 import com.moses.code.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,12 +25,12 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public Category getCategoryById(Long categoryId) throws CategoryNotFoundException {
-        return categoryRepository.findById(categoryId).orElseThrow(()->new CategoryNotFoundException("Category not found"));
+    public Category getCategoryById(Long categoryId) throws NotFoundException {
+        return categoryRepository.findById(categoryId).orElseThrow(()->new NotFoundException("Category not found"));
     }
 
     @Override
-    public void deleteCategory(Long categoryId) throws CategoryNotFoundException {
+    public void deleteCategory(Long categoryId) throws NotFoundException {
         Category category = getCategoryById(categoryId);
         categoryRepository.delete(category);
 

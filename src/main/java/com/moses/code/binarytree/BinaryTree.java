@@ -1,6 +1,5 @@
 package com.moses.code.binarytree;
 
-import com.moses.code.binarytree.BinaryTreeNode;
 import com.moses.code.entity.Product;
 import com.moses.code.exception.BadRequestException;
 
