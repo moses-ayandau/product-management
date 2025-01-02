@@ -14,7 +14,6 @@ public interface IProductService {
     Page<Product> getPaginatedAndSortedProducts(int page, int size, String sortBy, String sortDirection);
 
     Product getProductById(Long  productId) throws NotFoundException;
-    Product getProductByCategoryName(Long categoryName);
     Product updateProduct(ProductDto product, Long productId) throws NotFoundException;
     void deleteProduct(Long productId) throws NotFoundException;
 
@@ -25,7 +24,6 @@ public interface IProductService {
     List<Product> getTopExpensiveProducts(int limit);
 
 
-    long countProductsByCategoryName(String categoryName);
 
     List<Product> getAvailableProducts();
 

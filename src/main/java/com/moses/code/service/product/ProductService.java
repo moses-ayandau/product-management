@@ -63,10 +63,6 @@ public class ProductService implements IProductService {
         return productRepository.findById(productId).orElseThrow(()->new NotFoundException("Product Not found with the specified Id"));
     }
 
-    @Override
-    public Product getProductByCategoryName(Long categoryName) {
-        return null;
-    }
 
     @Override
     public Product updateProduct(ProductDto product, Long productId) throws NotFoundException {
@@ -122,10 +118,6 @@ public class ProductService implements IProductService {
     @Override
     public List<Product> getTopExpensiveProducts(int limit) {
         return productRepository.findTopExpensiveProducts(PageRequest.of(0, limit));
-    }
-    @Override
-    public long countProductsByCategoryName(String categoryName) {
-        return productRepository.countProductsByCategoryName(categoryName);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.moses.code.dto.ErrorResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,6 +39,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(UserNotFoundException ex, WebRequest request) {
         ErrorResponse error = new ErrorResponse(ex.getMessage(), request.getDescription(false));
+        ex.printStackTrace();
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
@@ -65,7 +67,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAuthorizationDeniedExceptionException(AuthorizationDeniedException ex, WebRequest request) {
+        ErrorResponse error = new ErrorResponse("You do not have permission for this route", request.getDescription(false));
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex, WebRequest request) {
         ErrorResponse error = new ErrorResponse("An unexpected error occurred", request.getDescription(false));

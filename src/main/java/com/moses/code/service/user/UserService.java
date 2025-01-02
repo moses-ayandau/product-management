@@ -1,9 +1,7 @@
 package com.moses.code.service.user;
 
-import com.moses.code.utils.PasswordUtils;
 import com.moses.code.entity.User;
 import com.moses.code.exception.EmailAlreadyExistException;
-import com.moses.code.exception.UnAuthenticatedException;
 import com.moses.code.exception.UserNotFoundException;
 import com.moses.code.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +19,8 @@ public class UserService implements IUserService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new EmailAlreadyExistException("Email already exists: " + user.getEmail());
         }
-
-
-        String hashedPassword = PasswordUtils.hashPassword(user.getPassword());
-        user.setPassword(hashedPassword);
+//        String hashedPassword = PasswordUtils.hashPassword(user.getPassword());
+        user.setPassword(user.getPassword());
         return userRepository.save(user);
     }
 
@@ -37,7 +33,6 @@ public class UserService implements IUserService {
     public List<User> getUsers() {
         return userRepository.findAll();
     }
-
 
 
     @Override
