@@ -27,14 +27,12 @@ public class JwtTokenGenerator {
         log.info("[JwtTokenGenerator:generateAccessToken] Token Creation Started for:{}", authentication.getName());
 
         String roles = getRolesOfUser(authentication);
-        String permissions = getPermissionsFromRoles(roles);
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("mosesamalitech")
                 .issuedAt(Instant.now())
                 .expiresAt(Instant.now().plus(15, ChronoUnit.MINUTES))
                 .subject(authentication.getName())
-                .claim("scope", permissions)
                 .claim("roles", roles)
                 .build();
 
@@ -49,7 +47,7 @@ public class JwtTokenGenerator {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("mosesamalitech")
                 .issuedAt(Instant.now())
-                .expiresAt(Instant.now().plus(15, ChronoUnit.DAYS))
+                .expiresAt(Instant.now().plus(30, ChronoUnit.DAYS))
                 .subject(authentication.getName())
                 .claim("scope", "REFRESH_TOKEN")
                 .claim("roles", roles)
@@ -64,19 +62,5 @@ public class JwtTokenGenerator {
                 .collect(Collectors.joining(","));
     }
 
-    private String getPermissionsFromRoles(String roles) {
-        Set<String> permissions = new HashSet<>();
 
-        if (roles.contains("ADMIN")) {
-            permissions.addAll(List.of("READ", "WRITE", "DELETE"));
-        }
-        if (roles.contains("MANAGER")) {
-            permissions.add("READ");
-        }
-        if (roles.contains("USER")) {
-            permissions.add("READ");
-        }
-
-        return String.join(" ", permissions);
-    }
 }
