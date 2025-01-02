@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -33,6 +34,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "Category not found"),
             @ApiResponse(responseCode = "400", description = "Invalid product data")
     })
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProductDto> addProduct(@RequestBody ProductDto productRequest) throws NotFoundException {
         Product product = productService.addProduct(productRequest);
         return new ResponseEntity<>(ProductMapper.convertFromProductToProductDto(product), HttpStatus.CREATED);
@@ -60,7 +62,7 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "Product retrieved successfully"),
             @ApiResponse(responseCode = "404", description = "Product not found")
     })
-    public ResponseEntity<ProductDto> getProductByProductId(@PathVariable Long productId) throws NotFoundException {
+        public ResponseEntity<ProductDto> getProductByProductId(@PathVariable Long productId) throws NotFoundException {
         Product product = productService.getProductById(productId);
         ProductDto productDto = ProductMapper.convertFromProductToProductDto(product);
         return new ResponseEntity<>(productDto, HttpStatus.OK);

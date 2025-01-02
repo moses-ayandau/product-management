@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("SELECT c FROM Category c WHERE c.name = :categoryName")
-    Optional<Object> findCategoryByName(String categoryName);
+    Optional<Category> findCategoryByName(String categoryName);
 }

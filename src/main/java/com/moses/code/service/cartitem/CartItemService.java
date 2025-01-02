@@ -38,8 +38,8 @@ public class CartItemService  implements ICartItemService {
 
         while (!success && retries > 0) {
             try {
-                Cart cart = cartService.getCart(cartId); // Get the cart by cartId
-                Product product = productService.getProductById(productId); // Get the product by productId
+                Cart cart = cartService.getCart(cartId);
+                Product product = productService.getProductById(productId);
                 User user = userRepository.findById(userId)
                         .orElseThrow(() -> new NotFoundException("User not found"));
 

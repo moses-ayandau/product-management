@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: product-management
+
+  profiles:
+    active: dev
+
+logging:
+  level:
+    root: INFO
+    com.moses.code: DEBUG
+  file:
+    name: logs/application.log
